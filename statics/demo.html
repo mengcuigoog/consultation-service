@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Demo</title>
+</head>
+<script type="text/javascript" src="./jquery.js"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		$.ajax({
+  url: "./jquery.js",
+  data: {
+    zipcode: 97201
+  },
+  success: function( result ) {
+    $( "#weather-temp" ).html( "<strong>" + result + "</strong> degrees" );
+  }
+});
+	});
+</script>
+<body>
+<div id="weather-temp"></div>
+</body>
+</html>

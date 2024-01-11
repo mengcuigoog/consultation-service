@@ -28,7 +28,6 @@ func TestCreatePrescription(t *testing.T) {
 	m := models.Prescription{
 		PatientInfoId: 12,
 		Content:       c,
-		Uid:           "uuid12312314",
 	}
 	err := p.Create(&m)
 	t.Logf("####:%v\n", err)
@@ -36,27 +35,52 @@ func TestCreatePrescription(t *testing.T) {
 
 func TestGetPrescription(t *testing.T) {
 	m := models.Prescription{
-		Uid: "uuid12312314",
+		Id:            1,
+		PatientInfoId: 12,
 	}
-	err := p.Get(&m)
+	err := p.GetOne(&m)
 	if err != nil {
 		t.Errorf("AAAAAA: %v\n", err)
 	}
+	t.Logf(">>>>>>>>>>>>:m:%+v", m)
 	for _, c := range m.Content {
 		t.Logf("####:%d %s %f\n", c.Id, c.Name, c.Price)
 	}
 
 }
 
+func TestGetAllPrescription(t *testing.T) {
+
+	pSlice, err := p.All()
+	if err != nil {
+		t.Errorf("AAAAAA: %v\n", err)
+	}
+
+	for _, c := range pSlice {
+		t.Logf("####:%+v\n", c)
+	}
+}
+
 func TestDelPrescription(t *testing.T) {
 	m := models.Prescription{
-		Uid: "uuid12312314",
+		Id: 1,
 	}
-	err := p.Get(&m)
+	err := p.GetOne(&m)
 	t.Logf("get ####:%q %v\n", err, m)
-
+	if err != nil {
+		t.Errorf("get failed %v", err)
+		t.Fail()
+	}
 	err = p.Del(&m)
 	if err != nil {
 		t.Errorf("del ####:%v %v\n", err, m)
 	}
+}
+
+func TestCountPrescription(t *testing.T) {
+	c, err := p.Count()
+	if err != nil {
+		t.Errorf("%v", err)
+	}
+	t.Logf("count:%d", c)
 }

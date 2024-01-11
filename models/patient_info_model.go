@@ -1,9 +1,10 @@
 package models
 
 type PatientInfo struct {
+	Id      uint
 	Name    string
-	Age     uint32
-	Sex     uint32
+	Age     uint
+	Sex     uint
 	Address string
 	Tel     string
 }

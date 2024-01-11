@@ -39,8 +39,6 @@ func Init() {
 	db.AutoMigrate(&models.PatientInfo{})
 	db.AutoMigrate(&models.Prescription{})
 
-	db.Migrator().DropColumn(&models.Prescription{}, "created")
-
 	// // Create
 	// db.Debug().Create(&Product{Code: "D42", Price: 100})
 

@@ -19,11 +19,21 @@ func (t *PrescriptionContextSlice) Scan(value interface{}) error {
 }
 
 func (t PrescriptionContextSlice) Value() (driver.Value, error) {
-	return json.Marshal(t)
+	v, err := json.Marshal(t)
+	if err != nil {
+		return nil, err
+	}
+	return v, nil
 }
 
 type Prescription struct {
+	Id            uint
 	PatientInfoId uint64
-	Content       PrescriptionContextSlice `json:"prescriptionContextSlice"`
-	Uid           string
+	Content       PrescriptionContextSlice `grom:"text" json:"prescriptionContextSlice"`
+}
+
+type ApiPrescription struct {
+	Id            uint
+	PatientInfoId uint64
+	Content       PrescriptionContextSlice `grom:"text" json:"prescriptionContextSlice"`
 }
