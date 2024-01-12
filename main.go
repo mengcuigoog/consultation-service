@@ -2,22 +2,26 @@ package main
 
 import (
 	"consultation-service/dao"
+	"consultation-service/services"
 	"fmt"
-	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
-func Hello(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("###:%s\n", r.Host)
-	w.Write([]byte("<h1>Hello World</h1>"))
-}
-
 func main() {
-	http.HandleFunc("/hello", Hello)
+	defaultEngine := gin.Default()
+	defaultEngine.Static("/statics/", "./statics/")
+	defaultEngine.LoadHTMLGlob("templates/*")
+
+	defaultEngine.GET("/index", services.HandleIndex)
+	defaultEngine.POST("/login", services.HandleLogin)
+	defaultEngine.POST("/logout", services.HandleLogout)
+
 	fmt.Println("start at [:9090]")
-	// demo()
 	dao.Init()
-	err := http.ListenAndServe(":9090", nil)
-	// err := http.ListenAndServeTLS(":9090", "", "", nil)
+
+	err := defaultEngine.Run(":9090")
+
 	if err != nil {
 		fmt.Printf("err:%v\n", err)
 		panic("start server failed")

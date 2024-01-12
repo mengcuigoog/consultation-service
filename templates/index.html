@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh_CN">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理系统</title>
 
-    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="/statics/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/statics/fonts/font-awesome/css/font-awesome.min.css" />
 
     <link id="themecss" rel="stylesheet" type="text/css"
         href="http://www.shieldui.com/shared/components/latest/css/light/all.min.css" />
 
-    <link rel="stylesheet" type="text/css" href="css/theme.css" />
-    <link rel="stylesheet" type="text/css" href="css/dashboard.css" />
+    <link rel="stylesheet" type="text/css" href="/statics/css/theme.css" />
+    <link rel="stylesheet" type="text/css" href="/statics/css/dashboard.css" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,7 +23,7 @@
 	<![endif]-->
 </head>
 
-<body>
+<body onload="init()">
     <div id="wrapper">
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="navbar-header">
@@ -88,7 +88,7 @@
                             <!-- <li><a href="#"><i class="fa fa-user"></i> </a></li> -->
                             <li><a href="#"><i class="fa fa-gear"></i> 设置</a></li>
                             <li class="divider"></li>
-                            <li><a href="#"><i class="fa fa-power-off"></i> 退出</a></li>
+                            <li><a href="#" onclick="doLogout()" ><i class="fa fa-power-off"></i> 退出</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -255,15 +255,104 @@
     </div>
     <!-- /#wrapper -->
 
-    <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- 登录窗口 -->
+    <div id="login" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-title">
+                    <h1 class="text-center">登录</h1>
+                </div>
+                <div class="modal-body">
+                    <form class="form-group" >
+                        <div class="form-group">
+                            <label for="">用户名</label>
+                            <input id="username" name="username" class="form-control" type="text" placeholder="" autocomplete="off" >
+                        </div>
+                        <div class="form-group">
+                            <label for="">密码</label>
+                            <input id="passwd" name="passwd" class="form-control" type="password" placeholder="">
+                        </div>
+                        <div class="text-right">
+                            <button class="btn btn-primary" type="button" onclick="doLogin()">登录</button>
+                            <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                        </div>
+                        <!-- <a href="" data-toggle="modal" data-dismiss="modal" data-target="#register">还没有账号？点我注册</a> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/statics/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/statics/bootstrap/js/bootstrap.min.js"></script>
 
     <script type="text/javascript"
         src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
 
-    <script type="text/javascript" src="js/theme.js"></script>
+    <script type="text/javascript" src="/statics/js/theme.js"></script>
     <script type="text/javascript">
+        var token;
+        function init() {
+            token = localStorage.getItem("token") || null
+            if (token != null) {
+                return
+            }
+            $('#login').modal('show');
+        }
 
+        function doLogin() {
+            console.log("username: ",$("#username").val());
+            $.ajax({
+                url: "/login",
+                type: "POST",
+                data: {
+                    "username": $("#username").val(),
+                    "passwd": "haha"
+                },
+                success: function (resp) {
+                    console.log("resp:", resp);
+                    if (resp.token) {
+                        localStorage.setItem("token", resp.token)
+                        $(function () { $('#login').modal('hide') });
+                    }
+
+                },
+                error: function (xhr) {
+                    console.log("do login failed:", xhr)
+                    // $(function () { $('#login').modal('show') });
+                }
+            })
+        }
+        function doLogout() {
+            $.ajax({
+                url: "/logout",
+                type: "POST",
+                data: {
+                    "username": "nihao",
+                    "passwd": "haha"
+                },
+                success: function (resp) {
+                    console.log("resp:", resp);
+                    localStorage.removeItem("token")
+                    window.location.reload();
+                },
+                error: function (xhr) {
+                    console.log("doLogout failed", xhr)
+                }
+            })
+        }
+
+        $(function () {
+            $('#login').on('hide.bs.modal', function () {
+                // alert('嘿，我听说您喜欢模态框...');
+                return true;
+            })
+        });
     </script>
 </body>
 
