@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>aaaa</title>
+</head>
+<body>
+<div>
+	
+		<table>
+			<thead>
+				<tr>
+					<th>col1</th>
+					<th>col2</th>
+					<th>col2</th>
+					<th>#</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<form id="form1" action="#">
+					<td>
+						<input type="text" id="idx1" name="idx" value="1">
+					</td>
+					<td>
+						<input type="text" id="idx1" name="idx" value="3">
+					</td>
+					<td>
+						<input type="text" id="idx1" name="idx" value="2">
+					</td>
+					<td>
+						<button onclick="doSubmit(form.id)">删除</button>
+					</td>
+					</form>
+				</tr>
+				<tr>
+					<form id="form2" action="#">
+					<td>
+						<input type="text" id="idx1" name="idx" value="11">
+					</td>
+					<td>
+						<input type="text" id="idx1" name="idx" value="33">
+					</td>
+					<td>
+						<input type="text" id="idx1" name="idx" value="22">
+					</td>
+					<td>
+						<button onclick="doSubmit(form.id)">删除</button>
+					</td>
+					</form>
+				</tr>
+			</tbody>
+		</table>
+	
+</div>
+<button onclick="doSubmit()" value="提交">提交</button>
+</body>
+<script type="text/javascript">
+ function doSubmit(param) {
+ 		console.log(">>>>>>>>>>>>",param)
+ 		f = document.getElementById(param);
+	    f.submit();
+ }
+</script>
+</html>

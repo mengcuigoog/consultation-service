@@ -31,9 +31,10 @@ func (pi *PatientInfoDao) GetOne(patientInfo *models.PatientInfo) error {
 }
 
 func (pi *PatientInfoDao) All() ([]models.PatientInfo, error) {
-	db := Db.Model(&models.PatientInfo{}).Find(&models.ApiPrescription{})
 	prescriptions := make([]models.PatientInfo, 0)
-	err := db.Find(&prescriptions, "id > 0").Error
+	db := Db.Model(&models.PatientInfo{}).Find(&models.ApiPatientInfo{})
+	db = db.Where("id > ?", 0)
+	err := db.Find(&prescriptions).Error
 	return prescriptions, err
 }
 

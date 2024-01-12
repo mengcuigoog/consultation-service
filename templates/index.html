@@ -14,7 +14,20 @@
 
     <link rel="stylesheet" type="text/css" href="/statics/css/theme.css" />
     <link rel="stylesheet" type="text/css" href="/statics/css/dashboard.css" />
-
+    <style>
+        .table thead tr th {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table tbody tr td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table tbody tr th {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -47,8 +60,8 @@
                             <li><a href="#"><i class="fa fa-edit"></i> 中药库存</a></li>
                         </ul>
                     </li> -->
-                    <li class="active"><a href="#"><i class="fa fa-table"></i> 病&nbsp&nbsp&nbsp&nbsp历</a></li>
-                    <li><a href="#"><i class="fa fa-edit"></i> 中药库存</a></li>
+                    <li class="active"><a href="#" onclick="initPatients()"><i class="fa fa-table"></i> 病&nbsp&nbsp&nbsp&nbsp历</a></li>
+                    <li><a href="#" onclick="showZhongyao()"><i class="fa fa-edit"></i> 中药库存</a></li>
 
                     <!-- <li><a href="bootstrap.html"><i class="fa fa-magic"></i> Bootstrap Elements</a></li>
                     <li class="nav nav-list nav-list-expandable">
@@ -94,164 +107,23 @@
                 </ul>
             </div>
         </nav>
+        <!-- 展示区域 -->
+        <div id="page-wrapper">
+            <div id="page_area" class="row">
+            </div>
 
-        <!-- <div id="page-wrapper">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><i class="fa fa-line-chart"></i> Live Statistics <a class="pull-right glyphicon glyphicon-option-horizontal" href="#" style="text-decoration:none;"></a></h3>
-                        </div>
-                        <div class="panel-body">
-                            <div id="chart_live" style="width:100%; height:250px;"></div>
-                        </div>
-                    </div>
-                    <div class="panel">
-                        <div class="panel-body">
-                            <div class="col-md-3 col-sm-3 col-xs-3 text-center">
-                                <h4><span class="fa fa-eye"></span> Views</h4>
-                                <h3>1450</h3>
-                            </div>
-                            <div class="col-md-3 col-sm-3 col-xs-3 text-center">
-                                <h4><span class="fa fa-file-video-o"></span> Pages</h4>
-                                <h3>327</h3>
-                            </div>
-                            <div class="col-md-3 col-sm-3 col-xs-3 text-center">
-                                <h4><span class="fa fa-users"></span> Users</h4>
-                                <h3>119</h3>
-                            </div>
-                            <div class="col-md-3 col-sm-3 col-xs-3 text-center">
-                                <h4><span class="fa fa-money"></span> Earnings</h4>
-                                <h3>$14.58</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-calendar"></i> Calendar</h3>
-                                </div>
-                                <div class="panel-body text-center">
-                                    <div id="calendar1"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-gear"></i> Settings</h3>
-                                </div>
-                                <div class="panel-body">
-									<ul class="list-group">
-										<li class="list-group-item">
-											<span class="label label-default">Label Default</span>
-											<div class="pull-right">
-												<input id="switch1" name="switch1" type="checkbox" />
-											</div>
-										</li>
-										<li class="list-group-item">
-											<span class="label label-success">Label Success</span>
-											<div class="pull-right">
-												<input id="switch2" name="switch2" type="checkbox" />
-											</div>
-										</li>
-										<li class="list-group-item">
-											<span class="label label-primary">Label Primary</span>
-											<div class="pull-right">
-												<input id="switch3" name="switch3" type="checkbox" checked="checked" />
-											</div>
-										</li>
-										<li class="list-group-item">
-											<span class="label label-info">Label Info</span>
-											<div class="pull-right">
-												<input id="switch4" name="switch4" type="checkbox" checked="checked" />
-											</div>
-										</li>
-										<li class="list-group-item">
-											<span class="label label-warning">Label Warning</span>
-											<div class="pull-right">
-												<input id="switch5" name="switch4" type="checkbox" />
-											</div>
-										</li>
-										<li class="list-group-item">
-											<span class="label label-danger">Label Danger</span>
-											<div class="pull-right">
-												<input id="switch6" name="switch4" type="checkbox" checked="checked" />
-											</div>
-										</li>
-									</ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <!-- <div class="panel panel-info">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><i class="fa fa-comments"></i> Messages <a class="pull-right fa fa-gear" href="#" style="text-decoration:none;"></a></h3>
-                        </div>
-                        <div class="panel-body">
-                            <div style="width:100%; height:250px;">
-                                <ul class="media-list">
-                                    <li class="media">
-                                        <div class="media-left">
-                                            <img class="media-object" src="images/user1.jpg" style="width:64px; height:64px; border-radius:50%; border:solid 1px #E1E1E1;" />
-                                        </div>
-                                        <div class="media-body">
-                                            <h4 class="media-heading">Jack Sparrow <small class="pull-right" style="color:#b6b6b6; margin-right:10px;"><i class="fa fa-clock-o"></i> 14 min ago</small></h4>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                        </div>
-                                    </li>
-                                    <li class="media">
-                                        <div class="media-left">
-                                            <img class="media-object" src="images/user2.jpg" style="width:64px; height:64px; border-radius:50%; border:solid 1px #E1E1E1;" />
-                                        </div>
-                                        <div class="media-body">
-                                            <h4 class="media-heading">Captain Cook <small class="pull-right" style="color:#b6b6b6; margin-right:10px;"><i class="fa fa-clock-o"></i> 29 min ago</small></h4>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <a href="#" class="btn btn-primary pull-right">View All Messages</a>
-                            </div>
-                        </div>
-                    </div> -->
-        <!-- <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><i class="fa fa-keyboard-o"></i> Keywords</h3>
-                        </div>
-                        <div class="panel-body text-center">
-                            <div id="tagcloud"></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-pie-chart"></i> Web Browser</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div id="chart_browsers" style="width:100%; height:200px;"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="glyphicon glyphicon-flag"></i> Overall Progress</h3>
-                                </div>
-                                <div class="panel-body">
-                                    <div id="progress" style="width:100%; height:200px; margin:auto;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-    </div>
-    </div>
-    <!-- /.row -->
-    </div> -->
-    <!-- /#page-wrapper -->
+            <!-- <div id="yao_sys" class="row" style="display: none;">
+                <ul class="list-group">
+                    <li class="list-group-item active" aria-current="true">An active item</li>
+                    <li class="list-group-item">A second item</li>
+                    <li class="list-group-item">A third item</li>
+                    <li class="list-group-item">A fourth item</li>
+                    <li class="list-group-item">And a fifth one</li>
+                </ul>
+            </div> -->
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper-->
     </div>
     <!-- /#wrapper -->
 
@@ -299,13 +171,51 @@
     <script type="text/javascript">
         var token;
         function init() {
-            token = localStorage.getItem("token") || null
-            if (token != null) {
+            token = localStorage.getItem("token") || ""
+            console.log(">>>>> token:", token)
+            if (token != null && token != "") {
+                //初始化对应模块数据
+                initPatients();
                 return
             }
             $('#login').modal('show');
         }
+        function initPatients() {
+            $.ajax({
+                url: "/patients",
+                type: "POST",
+                headers: {
+                    "token": token
+                },
+                success: function (resp) {
+                    console.log("resp:", resp.patients);
+                    // 展示数据
+                    showPatients(resp.patients)
+                },
+                error: function (xhr) {
+                    console.log("patients:", xhr.responseJSON)
+                }
+            })
+        }
 
+        function showPatients(ps) {
+            //先清除page_area下的所有元素
+            $("#page_area").empty();
+            // 拿到对应的元素信息
+            $("#page_area").append(`<table id="patients_table" class="table table-striped"><thead><tr><th scope="col">#</th><th scope="col">名字</th><th scope="col">年龄</th><th scope="col">性别</th><th scope="col">地址</th><th scope="col">电话</th><th scope="col">#</th></tr></thead></table>`);
+            patientsTableDom = $("#patients_table").append(`<tbody></tbody>`);
+            console.log("###: ", $("#patients_table").children("tbody").html());
+            tBody = $("#patients_table").children("tbody")
+            buttonStr = `<button>编辑</button><button>删除</button>`
+            $.each(ps,function(idx,value){
+                console.log("aaaaa: ", value)
+                data = `<tr><th scope="row">`+value.Id+`</th><td>`+value.Name+`</td><td>`+value.Age+`</td><td>`+value.Address+`</td><td>`+value.Sex+`</td><td>`+value.Tel+`</td><td>`+buttonStr+`</td></tr>`;
+                tBody.append(data);
+            })
+        }
+        function showZhongyao() {
+            $("#page_area").empty();
+        }
         function doLogin() {
             console.log("username: ", $("#username").val());
             $.ajax({
@@ -320,6 +230,8 @@
                     if (resp.token) {
                         localStorage.setItem("token", resp.token)
                         $(function () { $('#login').modal('hide') });
+                        //初始化对应模块数据
+                        initPatients();
                     }
 
                 },
@@ -334,7 +246,7 @@
                 url: "/logout",
                 type: "POST",
                 headers: {
-                    "token": token||"",
+                    "token": token,
                 },
                 data: {
                     "username": "nihao",
@@ -346,17 +258,10 @@
                     window.location.reload();
                 },
                 error: function (xhr) {
-                    console.log("doLogout failed", xhr)
+                    console.log("doLogout failed", xhr.responseJSON)
                 }
             })
         }
-
-        $(function () {
-            $('#login').on('hide.bs.modal', function () {
-                // alert('嘿，我听说您喜欢模态框...');
-                return true;
-            })
-        });
     </script>
 </body>
 

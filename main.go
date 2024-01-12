@@ -20,6 +20,7 @@ func main() {
 	authGroup := defaultEngine.Group("/").Use(plugins.HandleAuth())
 	{
 		authGroup.POST("/logout", services.HandleLogout)
+		authGroup.POST("/patients", services.GetAllPatients)
 	}
 
 	fmt.Println("start at [:9090]")
