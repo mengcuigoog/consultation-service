@@ -39,28 +39,7 @@ func Init() {
 	db.AutoMigrate(&models.PatientInfo{})
 	db.AutoMigrate(&models.Prescription{})
 
-	// // Create
-	// db.Debug().Create(&Product{Code: "D42", Price: 100})
-
-	// // Read
-	// var product Product
-	// db.First(&product, 1)                 // 根据整型主键查找
-	// db.First(&product, "code = ?", "D42") // 查找 code 字段值为 D42 的记录
-	// // db.
-
-	// // Update - 将 product 的 price 更新为 200
-	// db.Model(&product).Update("Price", 200)
-
-	// p := make([]Product, 0)
-	// ret := db.Model(&product).Limit(10).Find(&p)
-	// fmt.Printf("%+v, err :%v\n", p, ret.Error)
-	// // Update - 更新多个字段
-	// db.Model(&product).Updates(Product{Price: 200, Code: "F42"}) // 仅更新非零值字段
-	// db.Model(&product).Updates(map[string]interface{}{"Price": 200, "Code": "F42"})
-
-	// // Delete - 删除 product
-	// db.Delete(&product, 1)
-	// fmt.Printf(">>>>>>>>>>>> db init success")
+	// db.Migrator().MigrateColumn(&models.PatientInfo{},)
 
 	Db = db
 }

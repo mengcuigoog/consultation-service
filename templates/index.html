@@ -47,7 +47,7 @@
                             <li><a href="#"><i class="fa fa-edit"></i> 中药库存</a></li>
                         </ul>
                     </li> -->
-                    <li><a href="#"><i class="fa fa-table"></i> 病&nbsp&nbsp&nbsp&nbsp历</a></li>
+                    <li class="active"><a href="#"><i class="fa fa-table"></i> 病&nbsp&nbsp&nbsp&nbsp历</a></li>
                     <li><a href="#"><i class="fa fa-edit"></i> 中药库存</a></li>
 
                     <!-- <li><a href="bootstrap.html"><i class="fa fa-magic"></i> Bootstrap Elements</a></li>
@@ -88,7 +88,7 @@
                             <!-- <li><a href="#"><i class="fa fa-user"></i> </a></li> -->
                             <li><a href="#"><i class="fa fa-gear"></i> 设置</a></li>
                             <li class="divider"></li>
-                            <li><a href="#" onclick="doLogout()" ><i class="fa fa-power-off"></i> 退出</a></li>
+                            <li><a href="#" onclick="doLogout()"><i class="fa fa-power-off"></i> 退出</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -268,10 +268,11 @@
                     <h1 class="text-center">登录</h1>
                 </div>
                 <div class="modal-body">
-                    <form class="form-group" >
+                    <form class="form-group">
                         <div class="form-group">
                             <label for="">用户名</label>
-                            <input id="username" name="username" class="form-control" type="text" placeholder="" autocomplete="off" >
+                            <input id="username" name="username" class="form-control" type="text" placeholder=""
+                                autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label for="">密码</label>
@@ -306,7 +307,7 @@
         }
 
         function doLogin() {
-            console.log("username: ",$("#username").val());
+            console.log("username: ", $("#username").val());
             $.ajax({
                 url: "/login",
                 type: "POST",
@@ -332,6 +333,9 @@
             $.ajax({
                 url: "/logout",
                 type: "POST",
+                headers: {
+                    "token": token||"",
+                },
                 data: {
                     "username": "nihao",
                     "passwd": "haha"

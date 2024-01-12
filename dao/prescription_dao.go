@@ -2,7 +2,6 @@ package dao
 
 import (
 	"consultation-service/models"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -26,9 +25,7 @@ func NewPrescriptionDao() *PrescriptionDao {
 }
 
 func (p *PrescriptionDao) Create(prescription *models.Prescription) error {
-	// createRet := Db.Model(&models.Prescription{}).Create(prescription)
 	createRet := p.Db.Create(prescription)
-	fmt.Printf(">>>> create err:%v\n", createRet.Error)
 	return createRet.Error
 }
 

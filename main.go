@@ -2,6 +2,7 @@ package main
 
 import (
 	"consultation-service/dao"
+	"consultation-service/plugins"
 	"consultation-service/services"
 	"fmt"
 
@@ -15,7 +16,11 @@ func main() {
 
 	defaultEngine.GET("/index", services.HandleIndex)
 	defaultEngine.POST("/login", services.HandleLogin)
-	defaultEngine.POST("/logout", services.HandleLogout)
+	// 需要登录才能访问的接口
+	authGroup := defaultEngine.Group("/").Use(plugins.HandleAuth())
+	{
+		authGroup.POST("/logout", services.HandleLogout)
+	}
 
 	fmt.Println("start at [:9090]")
 	dao.Init()
