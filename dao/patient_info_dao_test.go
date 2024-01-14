@@ -73,3 +73,36 @@ func TestDelPatientInfo(t *testing.T) {
 		t.Errorf("del %v err:%v", pa, err)
 	}
 }
+
+func TestFindPatientInfo(t *testing.T) {
+	pa := models.PatientInfo{
+		// Name: "test_name_5",
+		// Tel: "13011259132",
+	}
+	result, err := patientInfoDao.Find(pa, 3, 0)
+	if err != nil {
+		t.Errorf("get failed,%v", err)
+		t.Fail()
+	}
+
+	for _, r := range result {
+		t.Logf("id:%d", r.Id)
+	}
+}
+
+func TestUpdatePrescription(t *testing.T) {
+	pa := models.PatientInfo{
+		Id:   1,
+		Name: "张三",
+		Age:  35,
+		Sex:  1,
+		// Address: "xxxx",
+		Tel: "13011259134",
+	}
+	err := patientInfoDao.Update(&pa)
+	if err != nil {
+		t.Errorf("%v", err)
+		t.Fail()
+	}
+	t.Logf("update success %+v", pa)
+}

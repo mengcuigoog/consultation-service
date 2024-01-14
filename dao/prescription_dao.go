@@ -39,6 +39,10 @@ func (p *PrescriptionDao) GetOne(prescription *models.Prescription) error {
 
 	err := tmpDb.Find(&models.ApiPrescription{}).First(prescription).Error
 	if err != nil {
+		if err.Error() == "record not found" {
+			prescription = &models.Prescription{}
+			return nil
+		}
 		return err
 	}
 	return err

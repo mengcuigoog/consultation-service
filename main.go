@@ -21,6 +21,9 @@ func main() {
 	{
 		authGroup.POST("/logout", services.HandleLogout)
 		authGroup.POST("/patients", services.GetAllPatients)
+		authGroup.POST("/updatepatients", services.UpdatePatients)
+
+		authGroup.POST("/getpatientsdetails", services.HandleGetPresciption)
 	}
 
 	fmt.Println("start at [:9090]")
