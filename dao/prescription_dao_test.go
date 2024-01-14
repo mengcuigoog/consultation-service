@@ -29,8 +29,17 @@ func TestCreatePrescription(t *testing.T) {
 		PatientInfoId: 12,
 		Content:       c,
 	}
-	err := p.Create(&m)
-	t.Logf("####:%v\n", err)
+	for i := 0; i < 12; i++ {
+		m.ConditionDescription = fmt.Sprintf("病情描述%d", i+1)
+		m.Id = 0
+		err := p.Create(&m)
+		t.Logf("####:%v\n", err)
+		if err != nil {
+			t.Errorf("create err:%v", err)
+			t.Fail()
+		}
+	}
+
 }
 
 func TestGetPrescription(t *testing.T) {
@@ -83,4 +92,32 @@ func TestCountPrescription(t *testing.T) {
 		t.Errorf("%v", err)
 	}
 	t.Logf("count:%d", c)
+}
+
+func TestFindPrescription(t *testing.T) {
+	m := models.Prescription{
+		PatientInfoId: 12,
+	}
+	count := 12
+	perPage := 3
+
+	allPage := (count / perPage)
+	// 如果总数对perPage取余数不为0，则说明页数需要加1
+	if count%perPage != 0 {
+		allPage += 1
+	}
+
+	for i := 0; i < allPage; i++ {
+		// 当前页减一乘上每页显示的个数
+		offset := (i) * perPage
+		c, err := p.Find(m, offset, perPage)
+		if err != nil {
+			t.Errorf("find p failed,err:%v", err)
+			t.Fail()
+		}
+		fmt.Printf("find page %d\n", i+1)
+		for _, cc := range c {
+			fmt.Printf("find:Id:%d pId:%d\n", cc.Id, cc.PatientInfoId)
+		}
+	}
 }

@@ -1,0 +1,179 @@
+{{template "base.html" .}}
+{{define "custom_style"}}
+<style>
+    .table thead tr th {
+        text-align: center;
+        vertical-align: middle;
+    }
+    .table tbody tr td {
+        text-align: center;
+        vertical-align: middle;
+    }
+    .table tbody tr input {
+        text-align: center;
+        vertical-align: middle;
+        border: none;
+    }
+    .table tbody tr th {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+{{end}}
+
+{{define "custom_js" }}
+<script type="text/javascript">
+    var token;
+    var curPage;
+    function init() {
+        token = localStorage.getItem("token") || ""
+        console.log(">>>>> token:", token)
+        if (token != null && token != "") {
+            //初始化对应模块数据
+            initPatientsDetails();
+            return
+        }
+        $('#login').modal('show');
+    }
+    function initPatientsDetails() {
+        //先清除page_area下的所有元素
+        $("#page_area").empty();
+        console.log(">>>>>prescriptions: ", prescriptions.length);
+        let data = `<!-- Tables -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-header">
+                    <h1>病历列表</h1>
+                    <button onclick="addPres()" style="display:inline;">添加</button>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>日期</th>
+                            <th>病情描述</th>
+                            <th>#</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>`;
+        if(prescriptions.length <= 0){
+            $("#page_area").append(`<div>未找到处方</div>`);
+            return
+        }
+        $("#page_area").append(data);
+        // 根据问诊人名字更新title内容
+        $("#page_area").find("h1").eq(0).text({{ .pname }}+" 处方列表");
+        $.each(prescriptions,function(idx,value){
+            $("#page_area").find("tbody").eq(0).append(`<tr><td prescition_id="`+value.Id+`">`+(idx+1)+`</td><td>2023/12/23</td><td width="60%"><p>`+value.ConditionDescription+`</p></td><td><button onclick="editDetail()">编辑</button><button id="deleteDetail">删除</button></td></tr>`);
+        })
+        
+        // console.log("tbody: ",$("#page_area").find("tbody").eq(0).text());
+        $(document).on("click","#deleteDetail", function(){
+            console.log("prescition_id: ",$(this).parents("tr").find("td").eq(0).attr("prescition_id"));
+            $.ajax({
+            url:"/delPresciption",
+            method:"POST",
+            headers:{
+                "token":token,
+            },
+            data:{
+                "id":$(this).parents("tr").find("td").eq(0).attr("prescition_id"),
+            },
+            success:function(resp){
+                // initPatients()
+                console.log("del success resp:", resp);
+                initPatientsDetails("",nil);
+            },
+            error:function(xhr){
+                console.log("handle update patients falied,", xhr.error());
+            },
+        })  
+        });
+    }
+
+    function doSavePatientInfo() {
+        console.log("#####db_idx: ",$('#db_idx'));
+        $.ajax({
+            url:"/updatepatients",
+            method:"POST",
+            headers:{
+                "token":token,
+            },
+            data:{
+                "id":$('#db_idx').val(),
+                "name":$('#patient_name').val(),
+                "age":$('#age').val(),
+                "sex":$('#sex').val(),
+                "address":$('#address').val(),
+                "tel":$('#tel').val(),
+            },
+            success:function(resp){
+                // console.log("");
+                $('#edit').modal('hide');
+                initPatients()
+            },
+            error:function(xhr){
+                $('#edit').modal('hide');
+                console.log("handle update patients falied,", xhr.error());
+            },
+        })   
+    }
+    function showPatientsDetail() {
+
+    }
+    function showZhongyao() {
+        $("#page_area").empty();
+    }
+    function doLogin() {
+        console.log("username: ", $("#username").val());
+        $.ajax({
+            url: "/login",
+            type: "POST",
+            data: {
+                "username": $("#username").val(),
+                "passwd": "haha"
+            },
+            success: function (resp) {
+                console.log("resp:", resp);
+                if (resp.token) {
+                    localStorage.setItem("token", resp.token);
+                    token = resp.token;
+                    $(function () { $('#login').modal('hide') });
+                    //初始化对应模块数据
+                    initPatients();
+                }
+
+            },
+            error: function (xhr) {
+                console.log("do login failed:", xhr)
+                // $(function () { $('#login').modal('show') });
+            }
+        })
+    }
+    function doLogout() {
+        $.ajax({
+            url: "/logout",
+            type: "POST",
+            headers: {
+                "token": token,
+            },
+            data: {
+                "username": "nihao",
+                "passwd": "haha"
+            },
+            success: function (resp) {
+                console.log("resp:", resp);
+                localStorage.removeItem("token")
+                window.location.reload();
+            },
+            error: function (xhr) {
+                console.log("doLogout failed", xhr.responseJSON)
+            }
+        })
+    }
+</script>
+{{end}}

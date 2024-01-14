@@ -10,7 +10,7 @@ import (
 )
 
 func HandleIndex(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", gin.H{})
+	c.HTML(http.StatusOK, "index", gin.H{})
 }
 
 func GetAllPatients(c *gin.Context) {

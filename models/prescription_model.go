@@ -27,13 +27,15 @@ func (t PrescriptionContextSlice) Value() (driver.Value, error) {
 }
 
 type Prescription struct {
-	Id            uint
-	PatientInfoId uint64
-	Content       PrescriptionContextSlice `grom:"text" json:"prescriptionContextSlice"`
+	Id                   int
+	PatientInfoId        int
+	Content              PrescriptionContextSlice `grom:"text" json:"prescriptionContextSlice"` //处方内容
+	ConditionDescription string                   // 问诊信息描述
 }
 
 type ApiPrescription struct {
-	Id            uint
-	PatientInfoId uint64
-	Content       PrescriptionContextSlice `grom:"text" json:"prescriptionContextSlice"`
+	Id                   uint
+	PatientInfoId        int
+	Content              PrescriptionContextSlice `grom:"text" json:"prescriptionContextSlice"` //处方内容
+	ConditionDescription string
 }
