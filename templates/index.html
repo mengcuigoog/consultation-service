@@ -116,17 +116,7 @@
         <div id="page-wrapper">
             <div id="page_area" class="row">
             </div>
-
-            <!-- <div id="yao_sys" class="row" style="display: none;">
-                <ul class="list-group">
-                    <li class="list-group-item active" aria-current="true">An active item</li>
-                    <li class="list-group-item">A second item</li>
-                    <li class="list-group-item">A third item</li>
-                    <li class="list-group-item">A fourth item</li>
-                    <li class="list-group-item">And a fifth one</li>
-                </ul>
-            </div> -->
-            <!-- /.row -->
+            <!-- /.row 展示区域 -->
         </div>
         <!-- /#page-wrapper-->
     </div>
@@ -275,25 +265,21 @@
             })
         }
         function doFormAction(formId, ac) {
-            // f = $("#patient_3")
 
-            console.log("######doAction: ",formId, ac)
-            // $(document).on('click','#modifyBtn',function(){
-            //     parentTr = $(this).parents("tr");
-            //     td = parentTr.find("td");
-            //     console.log("find td: ",td)
-            // })
         }
 
         function showPatients(ps) {
             //先清除page_area下的所有元素
             $("#page_area").empty();
-            searchElement = `<div class="form-group">
-                                    <label for="name" class="col control-label">搜索</label>
-                                    <div class="col-lg-2">
-                                        <input type="text" class="form-control" id="searchByName" placeholder="">
-                                    </div>
-                                </div>`;
+            searchElement=`<div class="row">
+                    <div class="navbar navbar-default">
+                        <div class="navbar-collapse collapse navbar-inverse-collapse">
+                            <form class="navbar-form navbar-left">
+                                <input type="text" class="form-control col-lg-8"  id="searchByName" placeholder="搜索"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>`;
             $("#page_area").append(searchElement);
             
             $("#searchByName").keydown(function(k){
@@ -351,12 +337,12 @@
 
             $(document).on('click','#showPatientsDetail',function(){
                 parentTr = $(this).parents("tr");
-                console.log("getpatientsdetails####td; ", parentTr.find("td").eq(0).attr("id"));
-                console.log("####td; ", parentTr.find("td").eq(1).text());
-                console.log("####td; ", parentTr.find("td").eq(2).text());
-                console.log("####td; ", parentTr.find("td").eq(3).text());
-                console.log("####td; ", parentTr.find("td").eq(4).text());
-                console.log("####td; ", parentTr.find("td").eq(5).text());
+                // console.log("getpatientsdetails####td; ", parentTr.find("td").eq(0).attr("id"));
+                // console.log("####td; ", parentTr.find("td").eq(1).text());
+                // console.log("####td; ", parentTr.find("td").eq(2).text());
+                // console.log("####td; ", parentTr.find("td").eq(3).text());
+                // console.log("####td; ", parentTr.find("td").eq(4).text());
+                // console.log("####td; ", parentTr.find("td").eq(5).text());
                 $.ajax({
                 url:"/getpatientsdetails",
                 method:"POST",
@@ -364,24 +350,81 @@
                     "token":token,
                 },
                 data:{
-                    "id":parentTr.find("td").eq(0).attr("id"),
+                    "patientInfoId":parentTr.find("td").eq(0).attr("id"),
                     "name":$('#patient_name').val(),
                     "tel":$('#tel').val(),
                 },
                 success:function(resp){
                     console.log("getpatientsdetails resp: ",resp);
-                    initPatientsDetails();
+                    // 按理说应该返回的是问诊人对应的药方列表
+                    initPatientsDetails(parentTr.find("td").eq(1).text(),resp.prescriptions);
                 },
                 error:function(xhr){
-                    // $('#edit').modal('hide');
                     console.log("handle update patients falied,", xhr.error());
                 },
             })
             });
         }
-        function initPatientsDetails() {
+        function initPatientsDetails(pname, prescriptions) {
+            //先清除page_area下的所有元素
+            $("#page_area").empty();
+            console.log(">>>>>prescriptions: ", prescriptions.length);
+            let data = `<!-- Tables -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="page-header">
+                        <h1>病历列表</h1>
+                        <button onclick="addPres()" style="display:inline;">添加</button>
+                    </div>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>日期</th>
+                                <th>病情描述</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>`;
+            if(prescriptions.length <= 0){
+                $("#page_area").append(`<div>未找到处方</div>`);
+                return
+            }
+            $("#page_area").append(data);
+            // 根据问诊人名字更新title内容
+            $("#page_area").find("h1").eq(0).text(pname+" 处方列表");
+            $.each(prescriptions,function(idx,value){
+                $("#page_area").find("tbody").eq(0).append(`<tr><td prescition_id="`+value.Id+`">`+(idx+1)+`</td><td>2023/12/23</td><td width="60%"><p>`+value.ConditionDescription+`</p></td><td><button onclick="editDetail()">编辑</button><button id="deleteDetail">删除</button></td></tr>`);
+            })
             
+            // console.log("tbody: ",$("#page_area").find("tbody").eq(0).text());
+            $(document).on("click","#deleteDetail", function(){
+                console.log("prescition_id: ",$(this).parents("tr").find("td").eq(0).attr("prescition_id"));
+                $.ajax({
+                url:"/delPresciption",
+                method:"POST",
+                headers:{
+                    "token":token,
+                },
+                data:{
+                    "id":$(this).parents("tr").find("td").eq(0).attr("prescition_id"),
+                },
+                success:function(resp){
+                    // initPatients()
+                    console.log("del success resp:", resp);
+                    initPatientsDetails("",nil);
+                },
+                error:function(xhr){
+                    console.log("handle update patients falied,", xhr.error());
+                },
+            })  
+            });
         }
+
         function doSavePatientInfo() {
             console.log("#####db_idx: ",$('#db_idx'));
             $.ajax({
@@ -464,5 +507,5 @@
         }
     </script>
 </body>
-
+<!--https://www.prepbootstrap.com/bootstrap-theme/pb-dashboard/preview-->
 </html>

@@ -2,6 +2,7 @@ package dao
 
 import (
 	"consultation-service/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -71,4 +72,23 @@ func (p *PrescriptionDao) Count() (int64, error) {
 	var count int64
 	err := p.Db.Model(&models.Prescription{}).Count(&count).Error
 	return count, err
+}
+
+func (p *PrescriptionDao) Find(prescription models.Prescription, offset, limit int) ([]models.Prescription, error) {
+	prescriptions := make([]models.Prescription, 0)
+
+	db := Db.Model(&models.Prescription{}).Find(&models.ApiPrescription{})
+
+	if prescription.PatientInfoId <= 0 {
+		return nil, fmt.Errorf("PatientInfoId is needed:%d", prescription.PatientInfoId)
+	}
+	db = db.Where("patient_info_id = ?", prescription.PatientInfoId)
+	db = db.Offset(offset)
+
+	if limit > 0 {
+		db = db.Limit(limit)
+	}
+
+	err := db.Find(&prescriptions).Error
+	return prescriptions, err
 }

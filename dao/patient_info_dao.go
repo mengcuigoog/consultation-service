@@ -40,7 +40,7 @@ func (pi *PatientInfoDao) All() ([]models.PatientInfo, error) {
 }
 
 func (pi *PatientInfoDao) Find(patientInfo models.PatientInfo, offset, limit int) ([]models.PatientInfo, error) {
-	prescriptions := make([]models.PatientInfo, 0)
+	patientInfos := make([]models.PatientInfo, 0)
 	db := Db.Model(&models.PatientInfo{}).Find(&models.ApiPatientInfo{})
 	if patientInfo.Tel != "" {
 		db = db.Where("tel = ?", patientInfo.Tel)
@@ -54,8 +54,8 @@ func (pi *PatientInfoDao) Find(patientInfo models.PatientInfo, offset, limit int
 	if limit > 0 {
 		db = db.Limit(limit)
 	}
-	err := db.Find(&prescriptions).Error
-	return prescriptions, err
+	err := db.Find(&patientInfos).Error
+	return patientInfos, err
 }
 
 func (pi *PatientInfoDao) Del(patientInfo *models.PatientInfo) error {
